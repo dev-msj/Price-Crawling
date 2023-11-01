@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
-@Entity('Futrues')
+@Entity('Futures')
 export class Futures {
   @PrimaryColumn({ type: "int" })
   futures_id: number;

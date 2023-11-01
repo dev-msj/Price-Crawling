@@ -8,7 +8,7 @@ export class Futures {
   @PrimaryColumn({ type: "varchar", length: 50 })
   futures_name: string;
 
-  @Column({ type: "int" })
+  @Column({ type: "date" })
   futures_date: Date;
 
   @Column({ type: "int" })

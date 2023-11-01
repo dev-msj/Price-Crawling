@@ -32,8 +32,8 @@ export class FuturesService {
     const futures = await this.futuresRepository.find({
       where: {
         futures_id:
-          LessThanOrEqual(this.parseStringDateToFuturesIdFormat(end_date)) &&
-          MoreThanOrEqual(this.parseStringDateToFuturesIdFormat(start_date)),
+          MoreThanOrEqual(this.parseDateStringToFuturesId(start_date)) &&
+          LessThanOrEqual(this.parseDateStringToFuturesId(end_date)),
         futures_name: futures_name,
       },
       take: 20,
@@ -43,7 +43,7 @@ export class FuturesService {
     return futures;
   }
 
-  private parseStringDateToFuturesIdFormat(stringDate: string): number {
-    return new Date(stringDate).getTime() / 1000;
+  private parseDateStringToFuturesId(dateString: string): number {
+    return new Date(dateString).getTime() / 1000;
   }
 }

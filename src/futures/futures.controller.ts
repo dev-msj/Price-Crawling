@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { FuturesService } from './futures.service';
 import { CreateFutureDto } from './dto/create-futures.dto';
+import { DateStringPipe } from 'pipe/date-string.pipe';
 
 @Controller('futures')
 export class FuturesController {
@@ -12,7 +13,20 @@ export class FuturesController {
   }
 
   @Get(':futures_name')
-  async findOne(@Param('futures_name') futures_name: string) {
+  async findFutures(@Param('futures_name') futures_name: string) {
     return await this.futuresService.findFutures(futures_name);
+  }
+
+  @Get(':futures_name/:start_date/:end_date')
+  async findFuturesByPeriod(
+    @Param('futures_name') futures_name: string,
+    @Param('start_date', DateStringPipe) start_date: string,
+    @Param('end_date', DateStringPipe) end_date: string,
+  ) {
+    return await this.futuresService.findFuturesByPeriod(
+      futures_name,
+      start_date,
+      end_date,
+    );
   }
 }

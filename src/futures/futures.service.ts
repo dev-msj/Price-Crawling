@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFutureDto } from './dto/create-future.dto';
-import { UpdateFutureDto } from './dto/update-future.dto';
+import { CreateFutureDto } from './dto/create-futures.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Futures } from './entities/futures.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class FuturesService {
+  constructor(
+    @InjectRepository(Futures)
+    private futuresRepository: Repository<Futures>
+  ) {}
   create(createFutureDto: CreateFutureDto) {
     return 'This action adds a new future';
   }
 
-  findAll() {
-    return `This action returns all futures`;
-  }
+  async findFutures(futures_name: string) {
+    const futures = await this.futuresRepository.find({
+      where: { futures_name: futures_name },
+      take: 20,
+      order: { futures_id: 'DESC' }
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} future`;
-  }
-
-  update(id: number, updateFutureDto: UpdateFutureDto) {
-    return `This action updates a #${id} future`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} future`;
+    return futures;
   }
 }

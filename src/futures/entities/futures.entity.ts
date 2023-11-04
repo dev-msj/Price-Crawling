@@ -26,4 +26,26 @@ export class Futures {
 
   @Column({ type: 'int' })
   readonly volume: number;
+
+  static from(
+    futuresId: number,
+    futuresName: string,
+    futuresDate: Date,
+    openPrice: number,
+    highPrice: number,
+    lowPrice: number,
+    closePrice: number,
+    volume: number,
+  ): Futures {
+    return Builder(Futures)
+      .futures_id(futuresId)
+      .futures_name(futuresName)
+      .futures_date(futuresDate)
+      .open_price(openPrice)
+      .high_price(highPrice)
+      .low_price(lowPrice)
+      .close_price(closePrice)
+      .volume(volume)
+      .build();
+  }
 }

@@ -3,9 +3,10 @@ import { FuturesService } from './futures.service';
 import { FuturesController } from './futures.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Futures } from './entities/futures.entity';
+import { CrawlingModule } from 'src/crawling/crawling.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Futures])],
+  imports: [CrawlingModule, TypeOrmModule.forFeature([Futures])],
   controllers: [FuturesController],
   providers: [FuturesService],
 })

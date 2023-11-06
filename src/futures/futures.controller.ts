@@ -1,15 +1,17 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Param } from '@nestjs/common';
 import { FuturesService } from './futures.service';
-import { CreateFutureDto } from './dto/create-futures.dto';
 import { DateStringPipe } from 'pipe/date-string.pipe';
+import { SuccessResponseDto } from './response/success-response.dto';
 
 @Controller('futures')
 export class FuturesController {
   constructor(private readonly futuresService: FuturesService) {}
 
   @Post()
-  create(@Body() createFutureDto: CreateFutureDto) {
-    return this.futuresService.create(createFutureDto);
+  async startFuturesDBUpdate() {
+    await this.futuresService.startFuturesDBUpdate();
+
+    return new SuccessResponseDto();
   }
 
   @Get(':futures_name')

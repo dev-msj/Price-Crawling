@@ -1,28 +1,51 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Builder } from 'builder-pattern';
 
 @Entity('Futures')
 export class Futures {
   @PrimaryColumn({ type: 'int' })
-  futures_id: number;
+  readonly futures_id: number;
 
   @PrimaryColumn({ type: 'varchar', length: 50 })
-  futures_name: string;
+  readonly futures_name: string;
 
   @Column({ type: 'date' })
-  futures_date: Date;
+  readonly futures_date: Date;
 
   @Column({ type: 'int' })
-  open_price: number;
+  readonly open_price: number;
 
   @Column({ type: 'int' })
-  high_price: number;
+  readonly high_price: number;
 
   @Column({ type: 'int' })
-  low_price: number;
+  readonly low_price: number;
 
   @Column({ type: 'int' })
-  close_price: number;
+  readonly close_price: number;
 
   @Column({ type: 'int' })
-  volume: number;
+  readonly volume: number;
+
+  static from(
+    futuresId: number,
+    futuresName: string,
+    futuresDate: Date,
+    openPrice: number,
+    highPrice: number,
+    lowPrice: number,
+    closePrice: number,
+    volume: number,
+  ): Futures {
+    return Builder(Futures)
+      .futures_id(futuresId)
+      .futures_name(futuresName)
+      .futures_date(futuresDate)
+      .open_price(openPrice)
+      .high_price(highPrice)
+      .low_price(lowPrice)
+      .close_price(closePrice)
+      .volume(volume)
+      .build();
+  }
 }

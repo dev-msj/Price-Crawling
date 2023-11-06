@@ -1,18 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFutureDto } from './dto/create-futures.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Futures } from './entities/futures.entity';
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { CrawlingService } from 'src/crawling/crawling.service';
+import { CreateFuturesDto } from './dto/create-futures.dto';
 
 @Injectable()
 export class FuturesService {
   constructor(
     @InjectRepository(Futures)
     private futuresRepository: Repository<Futures>,
+    private crawlingService: CrawlingService,
   ) {}
-  create(createFutureDto: CreateFutureDto) {
-    return 'This action adds a new future';
-  }
 
   async findFutures(futures_name: string): Promise<Array<Futures>> {
     const futures = await this.futuresRepository.find({
@@ -41,6 +40,14 @@ export class FuturesService {
     });
 
     return futures;
+  }
+
+  async startFuturesDBUpdate() {
+    const createFuturesDtoList: CreateFuturesDto[] =
+      await this.crawlingService.requestDataToAPI();
+    for (const createFuturesDto of createFuturesDtoList) {
+      this.futuresRepository.save(createFuturesDto.toFuturesEntity());
+    }
   }
 
   private parseDateStringToFuturesId(dateString: string): number {

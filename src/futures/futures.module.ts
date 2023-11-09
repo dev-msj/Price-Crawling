@@ -9,5 +9,6 @@ import { CrawlingModule } from 'src/crawling/crawling.module';
   imports: [CrawlingModule, TypeOrmModule.forFeature([Futures])],
   controllers: [FuturesController],
   providers: [FuturesService],
+  exports: [FuturesService],
 })
 export class FuturesModule {}

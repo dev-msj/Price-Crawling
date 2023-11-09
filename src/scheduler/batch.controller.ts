@@ -9,6 +9,7 @@ import { WINSTON_MODULE_PROVIDER, WinstonLogger } from 'nest-winston';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import crawlingConfig from 'src/config/crawlingConfig';
 import { ConfigType } from '@nestjs/config';
+import { SuccessResponseDto } from 'src/futures/response/success-response.dto';
 
 @Controller('batch')
 export class BatchController {
@@ -35,6 +36,8 @@ export class BatchController {
     this.logger.debug(
       `[${this.config.batchName}] start - ${new Date().toISOString()}`,
     );
+
+    return new SuccessResponseDto();
   }
 
   @Post('stop')
@@ -48,6 +51,8 @@ export class BatchController {
     this.logger.debug(
       `[${this.config.batchName}] stop - ${new Date().toISOString()}`,
     );
+
+    return new SuccessResponseDto();
   }
 
   private checkSecretKey(secretKey: string) {

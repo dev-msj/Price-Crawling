@@ -1,18 +1,16 @@
-import { Controller, Get, Post, Param } from '@nestjs/common';
+import { Controller, Get, Param, Inject } from '@nestjs/common';
 import { FuturesService } from './futures.service';
 import { DateStringPipe } from 'pipe/date-string.pipe';
-import { SuccessResponseDto } from './response/success-response.dto';
+import { ConfigType } from '@nestjs/config';
+import crawlingConfig from 'src/config/crawlingConfig';
 
 @Controller('futures')
 export class FuturesController {
-  constructor(private readonly futuresService: FuturesService) {}
-
-  @Post()
-  async startFuturesDBUpdate() {
-    await this.futuresService.startFuturesDBUpdate();
-
-    return new SuccessResponseDto();
-  }
+  constructor(
+    @Inject(crawlingConfig.KEY)
+    private config: ConfigType<typeof crawlingConfig>,
+    private readonly futuresService: FuturesService,
+  ) {}
 
   @Get(':futures_name')
   async findFutures(@Param('futures_name') futures_name: string) {

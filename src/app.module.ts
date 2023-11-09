@@ -5,6 +5,9 @@ import { AppController } from './app.controller';
 import { FuturesModule } from './futures/futures.module';
 import { typeOrmConfig } from './config/typeOrmConfig';
 import crawlingConfig from './config/crawlingConfig';
+import * as winston from 'winston';
+import { WinstonModule, utilities } from 'nest-winston';
+import { BatchModule } from './scheduler/batch.module';
 
 @Module({
   imports: [
@@ -14,7 +17,21 @@ import crawlingConfig from './config/crawlingConfig';
       load: [crawlingConfig],
     }),
     FuturesModule,
+    BatchModule,
     TypeOrmModule.forRootAsync(typeOrmConfig),
+    WinstonModule.forRoot({
+      transports: [
+        new winston.transports.Console({
+          level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            utilities.format.nestLike('FuturesDB_UpdateBatch', {
+              prettyPrint: true,
+            }),
+          ),
+        }),
+      ],
+    }),
   ],
   controllers: [AppController],
   providers: [],
